@@ -16,9 +16,9 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   //Hide all presentation layers
   //This demo uses three specific layers. I want to hide them initially so I can reveal them piece meal.
-  map.setLayoutProperty('author-location-text-title', 'visibility', 'none');
-  map.setLayoutProperty('temporality-count', 'visibility', 'none');
-  map.setLayoutProperty('religion-by-location', 'visibility', 'none');
+  map.setLayoutProperty('bang pak', 'visibility', 'none');
+  map.setLayoutProperty('india', 'visibility', 'none');
+  map.setLayoutProperty('main layer', 'visibility', 'none');
 
 //Hide the legend, slider, and infobox on first load. Obviously delete these lines if you want them visible from the start.
 document.getElementById('legend').style.display = 'none';
@@ -36,10 +36,10 @@ function createMenu(){
 
     // MENU For selecting layers
     // Read in all the layers you want to toggle
-    var toggleableLayerIds = ['religion-by-location', 'author-location-text-title', 'temporality-count'];
+    var toggleableLayerIds = ['bang pak', 'india', 'main layer'];
 
     //These are the names for the layers that will appear on the menu
-    var layerNames = ['Legend: Religion by Location', 'Infobox: Text Titles', 'Slider: Temporality']
+    var layerNames = ['Legend: Negative Interactions', 'Infobox: Text Titles', 'Slider: Temporality']
 
     //Loop that generates a menu item for each layer in the above array.
     for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -85,17 +85,17 @@ map.on('idle', () => {
     var id = toggleableLayerIds[i];
     var visibility = map.getLayoutProperty(id, 'visibility');
 
-    if (id == 'religion-by-location' && visibility === 'none') {
+    if (id == 'bang pak' && visibility === 'none') {
       document.getElementById('legend').style.display = 'none';
-    } else if (id == 'religion-by-location' && visibility === 'visible') {
+    } else if (id == 'bang pak' && visibility === 'visible') {
       document.getElementById('legend').style.display = 'initial';
     }
-    if (id == 'temporality-count' && visibility === 'none') {
+    if (id == 'india' && visibility === 'none') {
       document.getElementById('console').style.display = 'none';
-    } else if (id == 'temporality-count' && visibility === 'visible') {
+    } else if (id == 'india' && visibility === 'visible') {
       document.getElementById('console').style.display = 'initial';
     }
-    if (id == 'author-location-text-title' && visibility === 'none') {
+    if (id == 'main layer' && visibility === 'none') {
       document.getElementById('infobox').style.display = 'none';
     } else if (id == 'author-location-text-title' && visibility === 'visible') {
       document.getElementById('infobox').style.display = 'initial';
@@ -116,7 +116,7 @@ map.on('mousemove', function(e) {
 
   //MAKE CHANGE-----------------------------------------------------------------
   var info = map.queryRenderedFeatures(e.point, {
-    layers: ['author-location-text-title'] //REPLACE 'author-location-text-title' with the name of your layer
+    layers: ['bang pak'] //REPLACE 'author-location-text-title' with the name of your layer
     //of your layer
   });
 
