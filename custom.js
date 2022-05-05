@@ -20,105 +20,16 @@ map.on('load', () => {
   map.setLayoutProperty('bang-pak', 'visibility', 'none');
   map.setLayoutProperty('choropleth-2', 'visibility', 'none');
 
-//Hide the legend, slider, and infobox on first load. Obviously delete these lines if you want them visible from the start.
-document.getElementById('legend').style.display = 'none';
-document.getElementById('console').style.display = 'none';
-document.getElementById('infobox').style.display = 'none';
-
   //to reduce clutter, the steps for creating a legend, slider, and menu have all been turned into functions.
   createLegend()
-  createSlider()
-  createMenu()
 
 });
 
-function createMenu(){
-
-    // MENU For selecting layers
-    // Read in all the layers you want to toggle
-    var toggleableLayerIds = ['india', 'bang-pak', 'choropleth-2'];
-
-    //These are the names for the layers that will appear on the menu
-    var layerNames = ['Legend: Negative Interactions', 'Infobox: Text Titles', 'Slider: Temporality']
-
-    //Loop that generates a menu item for each layer in the above array.
-    for (var i = 0; i < toggleableLayerIds.length; i++) {
-      var id = toggleableLayerIds[i];
-      var name = layerNames[i];
-      var link = document.createElement('a');
-      link.href = '#';
-      link.className = ''; //Menu initially sets every item as inactive.
-      link.textContent = name;
-      link.id = id;
-
-      //create an event handler for each menu item. If clicked check whether the layer is visible, if so set visibility to 'none' and vice versa.
-      link.onclick = function(e) {
-        var clickedLayer = this.id;
-        e.preventDefault();
-        e.stopPropagation();
-
-        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-        if (visibility === 'visible') {
-          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-          this.className = '';
-
-        } else {
-          this.className = 'active';
-          map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-        }
-      };
-      var layers = document.getElementById('menu');
-      layers.appendChild(link);
-    }
-
-}
-
-
-//This is a lazy function to hide and show menus relative to the layers. It waits for any change in the map rendering and then checks to see what menu items are active and turns on the infobox, slider, and legend. Normally, you would build this logic into the click event handler for each button.
-
-map.on('idle', () => {
-
-  var toggleableLayerIds = ['religion-by-location', 'author-location-text-title', 'temporality-count'];
-
-  for (var i = 0; i < toggleableLayerIds.length; i++) {
-    var id = toggleableLayerIds[i];
-    var visibility = map.getLayoutProperty(id, 'visibility');
-
-    if (id == 'india' && visibility === 'none') {
-      document.getElementById('legend').style.display = 'none';
-    } else if (id == 'india' && visibility === 'visible') {
-      document.getElementById('legend').style.display = 'initial';
-    }
-    if (id == 'bang pak' && visibility === 'none') {
-      document.getElementById('console').style.display = 'none';
-    } else if (id == 'bang pak' && visibility === 'visible') {
-      document.getElementById('console').style.display = 'initial';
-    }
-    if (id == 'choropleth 2' && visibility === 'none') {
-      document.getElementById('infobox').style.display = 'none';
-    } else if (id == 'choropleth 2' && visibility === 'visible') {
-      document.getElementById('infobox').style.display = 'initial';
-    }
-  }
-});
 
 //Event handler for the infobox. This checks where the mouse is when it moves. If it moves over an area where the layer it populates the info box.
 map.on('mousemove', function(e) {
 
   //START INFOBOX CODE =======================================================
-
-  //CONTEXT--------------------------------------------------------
-  //The infobox is "triggered" by the mousemove function. That is, when your mouse moves over a certain area the function activates. It then pulls information from the layer in order to display it.  The two things you we will set here are the layer you are pulling information and the information you are going to display.
-
-  //CONTEXT-------------------------------------------------
-  // This makes a temporary version of the layer from which we will pull data based on the area the mouse cursor is pointing over (e.point). So if we are hovering over Delhi it will pull up the information on Delhi. In order to be able to do this the computer needs to know where to find this information. In this case, the layer is 'author-location-text-title'. Just so the script grabs the most up to date layer please publish your project. Now go to mapbox figure out what layer you want info for and copy the name exactly and replace 'author-location-text-title'.
-
-  //MAKE CHANGE-----------------------------------------------------------------
-  var info = map.queryRenderedFeatures(e.point, {
-    layers: ['author-location-text-title'] //REPLACE 'author-location-text-title' with the name of your layer
-    //of your layer
-  });
 
   //CONTEXT -----------------------------------------------------------------
   //The code below looks a bit overwhelming! Essentially, what we will be doing is telling the computer what information about what features we want to display. The code below produces the name of the author, the name of the story, the name of the location, and the count. It also adds a picture of the book cover.
@@ -130,21 +41,6 @@ map.on('mousemove', function(e) {
 
 
 
-  //MAKE CHANGE---------------------------------------------------------------
-  if (info.length > 0) {
-    var image = 'images/' + info[0].properties.author_name + '.jpg'
-    //i.e. image = images/Sikdar,Sunanda.jpg
-    var formatted_image = '<center>' + '<img width=90% src="' + image + '"/>' + '</center>'
-
-    document.getElementById('infobox_content').innerHTML = '<h5>' + "Name: " + info[0].properties.author_name + '</h5>' + formatted_image +
-      '<p>' + "Text title: " + info[0].properties.text_title + '</p><p>' + "Location name: " + info[0].properties.location_name + '</p>' + '<p>' + "Frequency: " + info[0].properties.Count +
-      '</p>';
-    //Depending on what you want to show you can add more variables and more text The stub above generates the author_name, text_title, the location_name and the frequency count.
-
-  } else {
-    document.getElementById('infobox_content').innerHTML = '<p>Hover over an area</p>';
-  }
-});
 
 
 function createLegend() {
@@ -176,31 +72,4 @@ function createLegend() {
   //LEGEND CODE
 
 
-}
-
-function createSlider() {
-  //Set the initial view at the first value. In this case, 1 for Pre-Partition.
-  map.setFilter('temporality-count', ['==', ['number', ['get', 'temporal_sequence']], 1]);
-  document.getElementById('active-temporality').innerText = 'Pre-Partition (before 1947-08-14)'
-  map.setLayoutProperty('temporality-count', 'visibility', 'none')
-
-  //Create event listener to catch whenever the slider is moved.
-  document.getElementById('slider').addEventListener('input', function(e) {
-    //get the value of the movement.
-    var step = parseInt(e.target.value, 10);
-
-    //These labels were created to populate the active temporality label. Change them if you are going with your own string sequence.
-    var label = ['Pre-Partition (before 1947-08-14)',
-      'Partition (1947-08-15 - 1948-02-28)',
-      'Post-Partition (1948-03-01 - 1971-12-16)',
-      'Long Partition (after 1971-12-16)',
-      'Indeterminable'
-    ]
-
-    //This is the filter function, it relies on the layer name, the comparison operator (==), the first value which it grabs with the get, temporal sequence function, and then the thing being compared against (step), or the step in the sequence of the slider.
-
-    map.setFilter('temporality-count', ['==', ['number', ['get', 'temporal_sequence']], step]);
-    //This sets the label above the slider to the period value.
-    document.getElementById('active-temporality').innerText = label[step - 1] //+ ampm;
-  })
 }
