@@ -16,9 +16,9 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   //Hide all presentation layers
   //This demo uses three specific layers. I want to hide them initially so I can reveal them piece meal.
-  map.setLayoutProperty('author-location-text-title', 'visibility', 'none');
-  map.setLayoutProperty('temporality-count', 'visibility', 'none');
-  map.setLayoutProperty('religion-by-location', 'visibility', 'none');
+  map.setLayoutProperty('india', 'visibility', 'none');
+  map.setLayoutProperty('bang pak', 'visibility', 'none');
+  map.setLayoutProperty('choropleth 2', 'visibility', 'none');
 
 //Hide the legend, slider, and infobox on first load. Obviously delete these lines if you want them visible from the start.
 document.getElementById('legend').style.display = 'none';
@@ -36,10 +36,10 @@ function createMenu(){
 
     // MENU For selecting layers
     // Read in all the layers you want to toggle
-    var toggleableLayerIds = ['religion-by-location', 'author-location-text-title', 'temporality-count'];
+    var toggleableLayerIds = ['india', 'bang pak', 'choropleth 2'];
 
     //These are the names for the layers that will appear on the menu
-    var layerNames = ['Legend: Religion by Location', 'Infobox: Text Titles', 'Slider: Temporality']
+    var layerNames = ['Legend: Negative Interactions', 'Infobox: Text Titles', 'Slider: Temporality']
 
     //Loop that generates a menu item for each layer in the above array.
     for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -85,19 +85,19 @@ map.on('idle', () => {
     var id = toggleableLayerIds[i];
     var visibility = map.getLayoutProperty(id, 'visibility');
 
-    if (id == 'religion-by-location' && visibility === 'none') {
+    if (id == 'india' && visibility === 'none') {
       document.getElementById('legend').style.display = 'none';
-    } else if (id == 'religion-by-location' && visibility === 'visible') {
+    } else if (id == 'india' && visibility === 'visible') {
       document.getElementById('legend').style.display = 'initial';
     }
-    if (id == 'temporality-count' && visibility === 'none') {
+    if (id == 'bang pak' && visibility === 'none') {
       document.getElementById('console').style.display = 'none';
-    } else if (id == 'temporality-count' && visibility === 'visible') {
+    } else if (id == 'bang pak' && visibility === 'visible') {
       document.getElementById('console').style.display = 'initial';
     }
-    if (id == 'author-location-text-title' && visibility === 'none') {
+    if (id == 'choropleth 2' && visibility === 'none') {
       document.getElementById('infobox').style.display = 'none';
-    } else if (id == 'author-location-text-title' && visibility === 'visible') {
+    } else if (id == 'choropleth 2' && visibility === 'visible') {
       document.getElementById('infobox').style.display = 'initial';
     }
   }
@@ -150,13 +150,13 @@ map.on('mousemove', function(e) {
 function createLegend() {
   //LEGEND TEXT
   //the var layers array sets the text that will show up in the legend. you can enter any value here it is just text. Make sure that the legend values correspond to the ones you set in Mapbox.
-  var layers = ['Hindu', 'Muslim', 'Sikh', 'Other'];
+  var layers = ['Hindu & Sikh', 'Muslim'];
 
   //LEGEND COLORS
   //Set the corresponding LEGEND colors using HEX the easiest way to do this is by setting your mapcolors in Mapbox using ColorBrewer (colorbrewer2.org). Then copy the exact same hex value to the array below. Remember that each label above should correspond to a color. If the number of items in layers does not match the number of values in colors you will get an error.
 
 
-  var colors = ['#321881', '#f88d1b', '#f7368a', '#0ac213'];
+  var colors = ['#f17641', '#419b50'];
 
 //run through each element in the legend array and create a new legend item.
   for (i = 0; i < layers.length; i++) {
