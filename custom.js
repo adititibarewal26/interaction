@@ -16,10 +16,7 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   //Hide all presentation layers
   //This demo uses three specific layers. I want to hide them initially so I can reveal them piece meal.
-  map.setLayoutProperty('india', 'visibility', 'none');
-  map.setLayoutProperty('bang-pak', 'visibility', 'none');
-  map.setLayoutProperty('choropleth-2', 'visibility', 'none');
-
+  
   //to reduce clutter, the steps for creating a legend, slider, and menu have all been turned into functions.
   createLegend()
 
